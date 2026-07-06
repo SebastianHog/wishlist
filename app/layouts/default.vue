@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { isAdmin, checkAuth, logout } = useAuth()
-const { currency, toggle: toggleCurrency, fetchRate } = useCurrency()
+const { currency, fetchRate, CURRENCY_LIST } = useCurrency()
 
 onMounted(async () => {
   await Promise.all([checkAuth(), fetchRate()])
@@ -19,17 +19,15 @@ onMounted(async () => {
         </NuxtLink>
 
         <div class="flex items-center gap-3">
-          <!-- Currency toggle -->
-          <button
-            class="flex items-center gap-1 px-2.5 py-1 rounded-lg border text-xs font-semibold transition-all"
-            :class="currency === 'EUR'
-              ? 'bg-blue-50 border-blue-200 text-blue-700'
-              : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'"
-            :title="currency === 'SEK' ? 'Switch to EUR' : 'Switch to SEK'"
-            @click="toggleCurrency"
+          <!-- Currency selector -->
+          <select
+            v-model="currency"
+            class="text-xs font-semibold bg-white border border-gray-200 rounded-lg pl-2 pr-6 py-1 text-gray-600 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 cursor-pointer"
           >
-            {{ currency === 'SEK' ? 'kr SEK' : '€ EUR' }}
-          </button>
+            <option v-for="c in CURRENCY_LIST" :key="c.code" :value="c.code">
+              {{ c.label }}
+            </option>
+          </select>
 
           <span
             v-if="isAdmin"
