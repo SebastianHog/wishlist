@@ -1,0 +1,14 @@
+services:
+  wishlist:
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - wishlist-data:/app/.data
+    environment:
+      NUXT_ADMIN_PASSWORD: ${NUXT_ADMIN_PASSWORD}
+      NUXT_SESSION_SECRET: ${NUXT_SESSION_SECRET}
+
+volumes:
+  wishlist-data:
