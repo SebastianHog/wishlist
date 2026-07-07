@@ -241,11 +241,12 @@ const longCount = computed(() => store.longTermGroups.reduce((n, g) => n + g.ite
                 @change="onGroupItemChange(group.priority, $event)"
               >
                 <template #item="{ element: item }">
-                  <div class="mb-2 cursor-grab active:cursor-grabbing">
+                  <div class="mb-1.5 cursor-grab active:cursor-grabbing">
                     <WishlistItem
                       :item="item"
                       :priority="group.priority"
                       is-admin
+                      compact
                       @edit="openEdit"
                       @delete="confirmDeleteId = $event"
                       @toggle-gotten="store.toggleGotten"
@@ -273,13 +274,14 @@ const longCount = computed(() => store.longTermGroups.reduce((n, g) => n + g.ite
             </span>
             <div class="h-px flex-1 bg-gray-100"></div>
           </div>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="flex flex-col gap-1.5">
             <WishlistItem
               v-for="item in group.items"
               :key="item.id"
               :item="item"
               :priority="group.priority"
               is-admin
+              compact
               @edit="openEdit"
               @delete="confirmDeleteId = $event"
               @toggle-gotten="store.toggleGotten"
@@ -317,13 +319,14 @@ const longCount = computed(() => store.longTermGroups.reduce((n, g) => n + g.ite
         <h2 class="text-base font-semibold text-gray-400 mb-4 flex items-center gap-2">
           <span>✓</span> Received / Fulfilled ({{ store.gottenItems.length }})
         </h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        <div class="flex flex-col gap-1.5">
           <WishlistItem
             v-for="item in store.gottenItems"
             :key="item.id"
             :item="item"
             :priority="99"
             is-admin
+            compact
             @edit="openEdit"
             @delete="confirmDeleteId = $event"
             @toggle-gotten="store.toggleGotten"
