@@ -239,6 +239,8 @@ const longCount = computed(() => store.longTermGroups.reduce((n, g) => n + g.ite
                 animation="200"
                 ghost-class="opacity-40"
                 drag-class="rotate-1 shadow-xl"
+                :delay="250"
+                :delay-on-touch-only="true"
                 :move="checkMove"
                 @change="onGroupItemChange(group.priority, $event)"
               >
