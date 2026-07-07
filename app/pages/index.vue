@@ -25,6 +25,11 @@ const { profileSlug, isAdmin } = useAuth()
             Manage my list
           </NuxtLink>
         </div>
+        <div v-else class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+          <NuxtLink to="/signup" class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white text-rose-600 text-sm font-bold hover:bg-rose-50 transition-colors shadow-lg">
+            Create your wishlist →
+          </NuxtLink>
+        </div>
       </div>
     </div>
 

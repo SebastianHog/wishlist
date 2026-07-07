@@ -1,8 +1,6 @@
 const RESERVED = ['login', 'admin']
 
 export default defineEventHandler(async (event) => {
-  await requireAdmin(event)
-
   const body = await readBody<{ name: string; password: string; slug?: string }>(event)
   if (!body?.name?.trim()) throw createError({ statusCode: 400, message: 'Name is required' })
   if (!body?.password) throw createError({ statusCode: 400, message: 'Password is required' })
