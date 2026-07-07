@@ -1,14 +1,20 @@
 <script setup lang="ts">
+import type { Profile } from '~/types/wishlist'
+
 const { profileSlug, isAdmin } = useAuth()
+const { data } = await useAsyncData('all-profiles', () => $fetch<Profile[]>('/api/profiles'))
+const profiles = computed(() => data.value ?? [])
 </script>
 
 <template>
   <div>
     <!-- Hero -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rose-500 via-pink-500 to-orange-400 px-8 py-20 mb-6 text-center">
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rose-500 via-pink-500 to-orange-400 mb-6">
       <div class="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/10 blur-2xl"></div>
       <div class="absolute -bottom-10 -left-10 w-56 h-56 rounded-full bg-orange-300/20 blur-3xl"></div>
-      <div class="relative">
+
+      <!-- Title section -->
+      <div class="relative px-8 pt-16 pb-10 text-center">
         <div class="text-8xl mb-5 drop-shadow-lg">🎁</div>
         <h1 class="text-5xl sm:text-6xl font-black text-white tracking-tight leading-none mb-2">Wishlist</h1>
         <p class="text-white/70 text-lg mt-3 font-light">Share what you want.</p>
@@ -31,24 +37,28 @@ const { profileSlug, isAdmin } = useAuth()
           </NuxtLink>
         </div>
       </div>
-    </div>
 
-    <!-- Feature cards -->
-    <div class="grid grid-cols-3 gap-3">
-      <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm text-center">
-        <div class="text-3xl mb-2">🎯</div>
-        <p class="font-semibold text-gray-800 text-sm">Prioritize</p>
-        <p class="text-xs text-gray-400 mt-0.5">Rank what matters most</p>
-      </div>
-      <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm text-center">
-        <div class="text-3xl mb-2">🌟</div>
-        <p class="font-semibold text-gray-800 text-sm">Plan ahead</p>
-        <p class="text-xs text-gray-400 mt-0.5">Short &amp; long term</p>
-      </div>
-      <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm text-center">
-        <div class="text-3xl mb-2">✓</div>
-        <p class="font-semibold text-gray-800 text-sm">Track gifts</p>
-        <p class="text-xs text-gray-400 mt-0.5">Mark what's been gotten</p>
+      <!-- Profiles list inside hero -->
+      <div v-if="profiles.length > 0" class="relative px-6 pb-6">
+        <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-4">
+          <p class="text-white/60 text-xs font-semibold uppercase tracking-wider mb-3 px-1">Wishlists</p>
+          <div class="space-y-2">
+            <NuxtLink
+              v-for="profile in profiles"
+              :key="profile.slug"
+              :to="`/${profile.slug}`"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors group"
+            >
+              <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                {{ profile.name[0].toUpperCase() }}
+              </div>
+              <span class="text-white font-semibold text-sm">{{ profile.name }}</span>
+              <svg class="w-3.5 h-3.5 text-white/40 group-hover:text-white/70 transition-colors ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </NuxtLink>
+          </div>
+        </div>
       </div>
     </div>
   </div>
