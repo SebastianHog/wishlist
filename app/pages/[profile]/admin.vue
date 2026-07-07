@@ -120,46 +120,48 @@ const longCount = computed(() => store.longTermGroups.reduce((n, g) => n + g.ite
 
 <template>
   <div>
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <div class="flex items-center gap-2 mb-1">
-          <NuxtLink to="/" class="text-sm text-gray-400 hover:text-gray-600 transition-colors">← Home</NuxtLink>
-          <span class="text-gray-300">·</span>
-          <NuxtLink :to="`/${profileSlug}`" class="text-sm text-gray-400 hover:text-gray-600 transition-colors">
-            View public page
-          </NuxtLink>
-        </div>
-        <h1 class="text-2xl font-bold text-gray-900">
-          {{ profile?.name }}'s Wishlist Admin
-        </h1>
-        <p class="text-gray-500 text-sm mt-0.5">Drag items between priority groups to reorder</p>
+    <div class="mb-6">
+      <div class="flex items-center gap-2 mb-1">
+        <NuxtLink to="/" class="text-sm text-gray-400 hover:text-gray-600 transition-colors">← Home</NuxtLink>
+        <span class="text-gray-300">·</span>
+        <NuxtLink :to="`/${profileSlug}`" class="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+          View public page
+        </NuxtLink>
       </div>
-      <div class="flex items-center gap-3">
-        <span
-          v-if="isSuperAdmin"
-          class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700"
-        >
-          <span class="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
-          Super Admin
-        </span>
-        <button
-          class="text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors"
-          @click="logout"
-        >
-          Sign out
-        </button>
-        <button
-          class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors"
-          @click="openAdd()"
-        >
-          + Add item
-        </button>
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">
+            {{ profile?.name }}'s Wishlist Admin
+          </h1>
+          <p class="text-gray-500 text-xs sm:text-sm mt-0.5 hidden sm:block">Drag items between priority groups to reorder</p>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span
+            v-if="isSuperAdmin"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
+            Super Admin
+          </span>
+          <button
+            class="text-sm font-medium text-gray-400 hover:text-gray-700 transition-colors py-2 px-1"
+            @click="logout"
+          >
+            Sign out
+          </button>
+          <button
+            class="px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors"
+            @click="openAdd()"
+          >
+            + Add
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="flex gap-1 mb-6 bg-gray-100 p-1 rounded-2xl w-fit">
+    <div class="flex gap-1 mb-6 bg-gray-100 p-1 rounded-2xl w-full sm:w-fit">
       <button
-        class="px-5 py-2 rounded-xl text-sm font-semibold transition-all"
+        class="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
         :class="activeList === 'short' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
         @click="activeList = 'short'"
       >
@@ -167,7 +169,7 @@ const longCount = computed(() => store.longTermGroups.reduce((n, g) => n + g.ite
         <span v-if="shortCount > 0" class="ml-1.5 text-xs font-medium text-gray-400">{{ shortCount }}</span>
       </button>
       <button
-        class="px-5 py-2 rounded-xl text-sm font-semibold transition-all"
+        class="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
         :class="activeList === 'long' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
         @click="activeList = 'long'"
       >
@@ -197,7 +199,7 @@ const longCount = computed(() => store.longTermGroups.reduce((n, g) => n + g.ite
         <template #item="{ element: group }">
           <div class="mb-6">
             <div class="flex items-center gap-3 mb-3">
-              <div class="group-drag-handle flex items-center gap-2 cursor-grab active:cursor-grabbing select-none">
+              <div class="group-drag-handle flex items-center gap-2 cursor-grab active:cursor-grabbing select-none touch-none">
                 <svg class="w-4 h-4 text-gray-300 hover:text-gray-500 transition-colors" fill="currentColor" viewBox="0 0 24 24">
                   <circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/>
                   <circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>

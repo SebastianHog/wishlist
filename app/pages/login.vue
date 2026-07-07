@@ -47,7 +47,7 @@ async function submit() {
             type="password"
             placeholder="••••••••"
             autocomplete="current-password"
-            class="w-full rounded-xl border-gray-200 shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+            class="w-full rounded-xl border-gray-200 shadow-sm text-base focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
@@ -58,7 +58,7 @@ async function submit() {
         <button
           type="submit"
           :disabled="loading || !password"
-          class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          class="w-full py-3 px-4 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {{ loading ? 'Signing in…' : 'Sign in' }}
         </button>

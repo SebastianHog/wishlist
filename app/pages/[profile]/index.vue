@@ -49,15 +49,15 @@ const gridClass = (priority: number) => {
     </div>
 
     <template v-else>
-      <div class="mb-8 flex items-start justify-between gap-4">
-        <div class="flex-1">
-          <h1 class="text-4xl font-extrabold text-gray-900">{{ profile.name }}'s Wishlist 🎁</h1>
-          <p class="mt-1 text-gray-500 text-sm">Things are ordered by priority — #1 is the most wanted.</p>
+      <div class="mb-6 flex items-start justify-between gap-3">
+        <div class="flex-1 min-w-0">
+          <h1 class="text-2xl sm:text-4xl font-extrabold text-gray-900 leading-tight">{{ profile.name }}'s Wishlist 🎁</h1>
+          <p class="mt-1 text-gray-500 text-sm hidden sm:block">Things are ordered by priority — #1 is the most wanted.</p>
         </div>
 
         <button
           v-if="hasAnyItems"
-          class="flex-shrink-0 mt-1 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-sm font-medium transition-all"
+          class="flex-shrink-0 mt-1 flex items-center gap-1.5 px-3 py-2 rounded-xl border text-sm font-medium transition-all"
           :class="compact
             ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
             : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-700'"
@@ -73,9 +73,9 @@ const gridClass = (priority: number) => {
         </button>
       </div>
 
-      <div class="flex gap-1 mb-6 bg-gray-100 p-1 rounded-2xl w-fit">
+      <div class="flex gap-1 mb-6 bg-gray-100 p-1 rounded-2xl w-full sm:w-fit">
         <button
-          class="px-5 py-2 rounded-xl text-sm font-semibold transition-all"
+          class="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
           :class="activeList === 'short' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
           @click="activeList = 'short'"
         >
@@ -85,7 +85,7 @@ const gridClass = (priority: number) => {
           </span>
         </button>
         <button
-          class="px-5 py-2 rounded-xl text-sm font-semibold transition-all"
+          class="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
           :class="activeList === 'long' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
           @click="activeList = 'long'"
         >

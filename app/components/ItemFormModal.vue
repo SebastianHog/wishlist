@@ -103,14 +103,14 @@ function onOverlayClick(e: MouseEvent) {
 <template>
   <Teleport to="body">
     <div
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in"
+      class="fixed inset-0 z-50 flex items-end sm:items-center p-0 sm:p-4 bg-black/40 backdrop-blur-sm animate-fade-in"
       @click="onOverlayClick"
     >
-      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div class="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h2 class="text-lg font-bold text-gray-900">{{ title }}</h2>
           <button
-            class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            class="p-2.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
             @click="emit('close')"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -147,7 +147,7 @@ function onOverlayClick(e: MouseEvent) {
               v-model="form.name"
               type="text"
               placeholder="e.g. Cozy socks"
-              class="w-full rounded-lg border-gray-200 shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+              class="w-full rounded-lg border-gray-200 shadow-sm text-base focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
 
@@ -160,7 +160,7 @@ function onOverlayClick(e: MouseEvent) {
               v-model="form.description"
               rows="2"
               placeholder="Any extra details..."
-              class="w-full rounded-lg border-gray-200 shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+              class="w-full rounded-lg border-gray-200 shadow-sm text-base focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
 
@@ -178,7 +178,7 @@ function onOverlayClick(e: MouseEvent) {
                   min="0"
                   step="0.01"
                   placeholder="0.00"
-                  class="w-full pl-7 rounded-lg border-gray-200 shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  class="w-full pl-7 rounded-lg border-gray-200 shadow-sm text-base focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
             </div>
@@ -189,7 +189,7 @@ function onOverlayClick(e: MouseEvent) {
                 v-model.number="form.priority"
                 type="number"
                 min="1"
-                class="w-full rounded-lg border-gray-200 shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+                class="w-full rounded-lg border-gray-200 shadow-sm text-base focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
           </div>
@@ -203,7 +203,7 @@ function onOverlayClick(e: MouseEvent) {
               v-model="form.link"
               type="url"
               placeholder="https://..."
-              class="w-full rounded-lg border-gray-200 shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+              class="w-full rounded-lg border-gray-200 shadow-sm text-base focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
 
@@ -216,7 +216,7 @@ function onOverlayClick(e: MouseEvent) {
               v-model="form.image"
               type="url"
               placeholder="https://..."
-              class="w-full rounded-lg border-gray-200 shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+              class="w-full rounded-lg border-gray-200 shadow-sm text-base focus:ring-indigo-500 focus:border-indigo-500"
             />
             <div v-if="form.image" class="mt-2 rounded-lg overflow-hidden bg-gray-50 h-24 flex items-center justify-center">
               <img

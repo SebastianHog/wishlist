@@ -51,7 +51,7 @@ async function submit() {
             placeholder="e.g. Sebastian"
             autocomplete="name"
             autofocus
-            class="w-full rounded-xl border-gray-200 shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+            class="w-full rounded-xl border-gray-200 shadow-sm text-base focus:ring-indigo-500 focus:border-indigo-500"
           />
           <p v-if="name.trim()" class="mt-1 text-xs text-gray-400">
             Your wishlist will be at <span class="font-mono">/{{ name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || '…' }}</span>
@@ -65,7 +65,7 @@ async function submit() {
             type="password"
             placeholder="••••••••"
             autocomplete="new-password"
-            class="w-full rounded-xl border-gray-200 shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+            class="w-full rounded-xl border-gray-200 shadow-sm text-base focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
@@ -76,7 +76,7 @@ async function submit() {
             type="password"
             placeholder="••••••••"
             autocomplete="new-password"
-            class="w-full rounded-xl border-gray-200 shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500"
+            class="w-full rounded-xl border-gray-200 shadow-sm text-base focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
@@ -87,7 +87,7 @@ async function submit() {
         <button
           type="submit"
           :disabled="loading || !name.trim() || !password || !confirmPassword"
-          class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          class="w-full py-3 px-4 rounded-xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {{ loading ? 'Creating…' : 'Create wishlist' }}
         </button>
