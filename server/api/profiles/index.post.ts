@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     id: generateId(),
     name: body.name.trim(),
     slug,
-    password: body.password,
+    password: hashPassword(body.password),
     createdAt: new Date().toISOString(),
   }
 

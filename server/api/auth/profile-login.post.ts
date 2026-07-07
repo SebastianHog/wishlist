@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const profiles = await getProfiles()
   const profile = profiles.find(p => p.slug === body.slug)
-  if (!profile || profile.password !== body.password) {
+  if (!profile || !verifyPassword(body.password, profile.password)) {
     throw createError({ statusCode: 401, message: 'Invalid password' })
   }
 
