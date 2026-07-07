@@ -1,5 +1,8 @@
 export default defineEventHandler(async (event) => {
-  await requireAdmin(event)
+  const session = await getAdminSession(event)
+  if (!session.data.isAdmin && !session.data.profileSlug) {
+    throw createError({ statusCode: 401, message: 'Unauthorized' })
+  }
 
   const body = await readBody<{
     name: string
@@ -9,11 +12,17 @@ export default defineEventHandler(async (event) => {
     image?: string
     priority: number
     list?: 'short' | 'long'
+    profile?: string
   }>(event)
 
   if (!body?.name?.trim()) {
     throw createError({ statusCode: 400, message: 'Name is required' })
   }
+
+  // Profile admins can only add items to their own profile
+  const profileSlug = session.data.isAdmin
+    ? (body.profile ?? '')
+    : (session.data.profileSlug as string)
 
   const items = await getItems()
   const now = new Date().toISOString()
@@ -28,12 +37,12 @@ export default defineEventHandler(async (event) => {
     priority: body.priority ?? 1,
     gotten: false,
     list: body.list ?? 'short',
+    profile: profileSlug,
     createdAt: now,
     updatedAt: now,
   }
 
   items.push(newItem)
   await saveItems(items)
-
   return newItem
 })

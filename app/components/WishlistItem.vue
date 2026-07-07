@@ -17,8 +17,8 @@ const emit = defineEmits<{
 
 const sizeConfig = computed(() => {
   if (props.priority === 1) return { imgAspect: 'aspect-[4/3]', imgPad: 'p-4', title: 'text-2xl', card: 'p-6', badge: 'text-base px-3 py-1' }
-  if (props.priority === 2) return { imgAspect: 'aspect-[4/3]', imgPad: 'p-3', title: 'text-xl', card: 'p-5', badge: 'text-sm px-2.5 py-0.5' }
-  if (props.priority === 3) return { imgAspect: 'aspect-square',  imgPad: 'p-3', title: 'text-lg', card: 'p-4', badge: 'text-sm px-2.5 py-0.5' }
+  if (props.priority === 2) return { imgAspect: 'aspect-[4/3]', imgPad: 'p-3', title: 'text-xl',  card: 'p-5', badge: 'text-sm px-2.5 py-0.5' }
+  if (props.priority === 3) return { imgAspect: 'aspect-square',  imgPad: 'p-3', title: 'text-lg',  card: 'p-4', badge: 'text-sm px-2.5 py-0.5' }
   return                           { imgAspect: 'aspect-square',  imgPad: 'p-2', title: 'text-base', card: 'p-4', badge: 'text-xs px-2 py-0.5' }
 })
 
@@ -41,7 +41,7 @@ const cardLinkProps = computed(() =>
     v-if="compact"
     class="group bg-white rounded-xl border border-gray-100 shadow-sm transition-all duration-200 overflow-hidden flex items-center gap-3 px-3 py-2.5"
     :class="[
-      item.gotten ? 'opacity-60 grayscale' : 'hover:shadow-md hover:border-gray-200',
+      item.gotten ? 'opacity-50 grayscale' : 'hover:border-gray-200 hover:shadow',
       isDragging ? 'shadow-xl scale-105' : '',
       item.link && !isAdmin ? 'cursor-pointer' : '',
     ]"
@@ -57,23 +57,15 @@ const cardLinkProps = computed(() =>
         @error="($event.target as HTMLImageElement).closest('div')!.style.display = 'none'"
       />
     </div>
-    <div
-      v-else
-      class="flex-shrink-0 w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center text-gray-300 text-xl"
-    >
+    <div v-else class="flex-shrink-0 w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center text-gray-300 text-xl">
       🎁
     </div>
 
     <div class="flex-1 min-w-0">
-      <p
-        class="text-sm font-semibold text-gray-900 truncate leading-tight"
-        :class="item.gotten ? 'line-through text-gray-400' : ''"
-      >
+      <p class="text-sm font-semibold text-gray-900 truncate leading-tight" :class="item.gotten ? 'line-through text-gray-400' : ''">
         {{ item.name }}
       </p>
-      <p v-if="item.description" class="text-xs text-gray-400 truncate leading-tight mt-0.5">
-        {{ item.description }}
-      </p>
+      <p v-if="item.description" class="text-xs text-gray-400 truncate leading-tight mt-0.5">{{ item.description }}</p>
     </div>
 
     <div class="flex-shrink-0 flex items-center gap-2">
@@ -94,7 +86,7 @@ const cardLinkProps = computed(() =>
 
       <div v-if="isAdmin" class="flex items-center gap-1 ml-1">
         <button
-          class="p-1 rounded text-gray-300 hover:text-green-600 transition-colors"
+          class="p-1 rounded text-gray-300 hover:text-green-500 transition-colors"
           :class="item.gotten ? 'text-green-500' : ''"
           :title="item.gotten ? 'Mark as not received' : 'Mark as received'"
           @click.stop="emit('toggleGotten', item.id)"
@@ -124,7 +116,7 @@ const cardLinkProps = computed(() =>
     v-else
     class="group bg-white rounded-2xl border border-gray-100 shadow-sm transition-all duration-200 overflow-hidden"
     :class="[
-      item.gotten ? 'opacity-60 grayscale' : 'hover:shadow-md hover:-translate-y-0.5',
+      item.gotten ? 'opacity-50 grayscale' : 'hover:border-gray-200 hover:-translate-y-0.5 hover:shadow-md',
       isDragging ? 'shadow-xl rotate-1 scale-105' : '',
       item.link && !isAdmin ? 'cursor-pointer' : '',
     ]"
@@ -153,18 +145,12 @@ const cardLinkProps = computed(() =>
           >
             {{ item.name }}
           </h3>
-
-          <p
-            v-if="item.description"
-            class="mt-1.5 text-gray-500 leading-snug"
-            :class="priority <= 2 ? 'text-sm' : 'text-xs'"
-          >
+          <p v-if="item.description" class="mt-1.5 text-gray-500 leading-snug" :class="priority <= 2 ? 'text-sm' : 'text-xs'">
             {{ item.description }}
           </p>
         </div>
-
         <div v-if="item.gotten" class="flex-shrink-0">
-          <span class="inline-flex items-center gap-1 bg-green-100 text-green-700 rounded-full font-semibold" :class="sizeConfig.badge">
+          <span class="inline-flex items-center gap-1 bg-green-50 text-green-700 rounded-full font-semibold ring-1 ring-green-100" :class="sizeConfig.badge">
             ✓ Received
           </span>
         </div>
@@ -175,13 +161,12 @@ const cardLinkProps = computed(() =>
           <span v-if="formattedPrice" class="font-semibold text-indigo-600" :class="priority <= 2 ? 'text-sm' : 'text-xs'">
             {{ formattedPrice }}
           </span>
-
           <a
             v-if="item.link"
             :href="item.link"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1 text-indigo-500 hover:text-indigo-700 transition-colors"
+            class="inline-flex items-center gap-1 text-gray-400 hover:text-indigo-500 transition-colors"
             :class="priority <= 2 ? 'text-sm' : 'text-xs'"
           >
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -193,8 +178,8 @@ const cardLinkProps = computed(() =>
 
         <div v-if="isAdmin" class="flex items-center gap-1.5">
           <button
-            class="p-1.5 rounded-lg text-gray-400 hover:text-green-600 hover:bg-green-50 transition-colors"
-            :class="item.gotten ? 'text-green-600 bg-green-50' : ''"
+            class="p-1.5 rounded-lg text-gray-300 hover:text-green-500 hover:bg-green-50 transition-colors"
+            :class="item.gotten ? 'text-green-500 bg-green-50' : ''"
             :title="item.gotten ? 'Mark as not received' : 'Mark as received'"
             @click.stop="emit('toggleGotten', item.id)"
           >
@@ -202,22 +187,12 @@ const cardLinkProps = computed(() =>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
           </button>
-
-          <button
-            class="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-            title="Edit item"
-            @click.stop="emit('edit', item)"
-          >
+          <button class="p-1.5 rounded-lg text-gray-300 hover:text-blue-500 hover:bg-blue-50 transition-colors" @click.stop="emit('edit', item)">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
           </button>
-
-          <button
-            class="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-            title="Delete item"
-            @click.stop="emit('delete', item.id)"
-          >
+          <button class="p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors" @click.stop="emit('delete', item.id)">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>

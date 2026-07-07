@@ -1,114 +1,50 @@
 <script setup lang="ts">
-	import type { WishlistList } from "~/types/wishlist";
-
-	const store = useWishlistStore();
-
-	const { data } = await useAsyncData("wishlist", () => $fetch("/api/wishlist"));
-	if (data.value) store.items = data.value as any;
-
-	const compact = ref(true);
-	onMounted(() => {
-		const stored = localStorage.getItem("wishlist-compact");
-		if (stored !== null) compact.value = stored === "true";
-	});
-	watch(compact, (val) => localStorage.setItem("wishlist-compact", String(val)));
-
-	const activeList = ref<WishlistList>("short");
-
-	const currentGroups = computed(() => (activeList.value === "short" ? store.shortTermGroups : store.longTermGroups));
-	const currentGotten = computed(() => store.gottenFor(activeList.value));
-	const hasAnyItems = computed(() => store.shortTermGroups.length > 0 || store.longTermGroups.length > 0);
-
-	const gridClass = (priority: number) => {
-		if (compact.value) return "flex flex-col gap-1.5";
-		if (priority === 1) return "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4";
-		if (priority === 2) return "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3";
-		if (priority === 3) return "grid grid-cols-2 sm:grid-cols-3 gap-3";
-		return "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2";
-	};
+const { profileSlug, isAdmin } = useAuth()
 </script>
 
 <template>
-	<div>
-		<div class="mb-8 flex items-start justify-between gap-4">
-			<div class="text-center flex-1">
-				<h1 class="text-4xl font-extrabold text-gray-900">My Wishlist 🎁</h1>
-				<p class="mt-2 text-gray-500">My wishlist/buylist. Things are ordered by a mental calciulation of cost/time of need. For example, I'd love all new PC parts right now, but a cutting board is more realistic in the short term.</p>
-			</div>
+  <div>
+    <!-- Hero -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rose-500 via-pink-500 to-orange-400 px-8 py-20 mb-6 text-center">
+      <div class="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/10 blur-2xl"></div>
+      <div class="absolute -bottom-10 -left-10 w-56 h-56 rounded-full bg-orange-300/20 blur-3xl"></div>
+      <div class="relative">
+        <div class="text-8xl mb-5 drop-shadow-lg">🎁</div>
+        <h1 class="text-5xl sm:text-6xl font-black text-white tracking-tight leading-none mb-2">Wishlist</h1>
+        <p class="text-white/70 text-lg mt-3 font-light">Share what you want.</p>
+        <div v-if="isAdmin" class="mt-8">
+          <NuxtLink to="/admin" class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white text-rose-600 text-sm font-bold hover:bg-rose-50 transition-colors shadow-lg">
+            Manage profiles →
+          </NuxtLink>
+        </div>
+        <div v-else-if="profileSlug" class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+          <NuxtLink :to="`/${profileSlug}`" class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white text-rose-600 text-sm font-bold hover:bg-rose-50 transition-colors shadow-lg">
+            My wishlist →
+          </NuxtLink>
+          <NuxtLink :to="`/${profileSlug}/admin`" class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/20 text-white text-sm font-bold hover:bg-white/30 transition-colors">
+            Manage my list
+          </NuxtLink>
+        </div>
+      </div>
+    </div>
 
-			<button v-if="hasAnyItems" class="flex-shrink-0 mt-1 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-sm font-medium transition-all" :class="compact ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-700'" @click="compact = !compact">
-				<svg v-if="!compact" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-				</svg>
-				<svg v-else class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-				</svg>
-				{{ compact ? "Cards" : "Compact" }}
-			</button>
-		</div>
-
-		<!-- List tabs -->
-		<div class="flex gap-1 mb-6 bg-gray-100 p-1 rounded-2xl w-fit">
-			<button class="px-5 py-2 rounded-xl text-sm font-semibold transition-all" :class="activeList === 'short' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'" @click="activeList = 'short'">
-				🎯 Short Term
-				<span v-if="store.shortTermGroups.length > 0" class="ml-1.5 text-xs font-medium text-gray-400">
-					{{ store.shortTermGroups.reduce((n, g) => n + g.items.length, 0) }}
-				</span>
-			</button>
-			<button class="px-5 py-2 rounded-xl text-sm font-semibold transition-all" :class="activeList === 'long' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'" @click="activeList = 'long'">
-				🌟 Long Term
-				<span v-if="store.longTermGroups.length > 0" class="ml-1.5 text-xs font-medium text-gray-400">
-					{{ store.longTermGroups.reduce((n, g) => n + g.items.length, 0) }}
-				</span>
-			</button>
-		</div>
-
-		<div v-if="store.loading" class="flex justify-center py-20">
-			<div class="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-		</div>
-
-		<template v-else-if="currentGroups.length > 0">
-			<div :class="compact ? 'space-y-4' : 'space-y-8'">
-				<section v-for="group in currentGroups" :key="group.priority">
-					<div class="flex items-center gap-3 mb-3">
-						<span
-							class="inline-flex items-center justify-center rounded-full font-bold flex-shrink-0"
-							:class="{
-								'bg-yellow-400 text-yellow-900 w-10 h-10 text-base': group.priority === 1 && !compact,
-								'bg-yellow-400 text-yellow-900 w-8 h-8 text-sm': group.priority === 1 && compact,
-								'bg-gray-300 text-gray-700 w-9 h-9 text-sm': group.priority === 2 && !compact,
-								'bg-gray-300 text-gray-700 w-8 h-8 text-sm': group.priority === 2 && compact,
-								'bg-amber-600 text-amber-100 w-8 h-8 text-sm': group.priority === 3,
-								'bg-indigo-100 text-indigo-600 w-8 h-8 text-sm': group.priority > 3,
-							}">
-							#{{ group.priority }}
-						</span>
-						<div class="h-px flex-1 bg-gray-100"></div>
-					</div>
-
-					<div :class="gridClass(group.priority)">
-						<WishlistItem v-for="item in group.items" :key="item.id" :item="item" :priority="group.priority" :compact="compact" />
-					</div>
-				</section>
-			</div>
-		</template>
-
-		<div v-else class="text-center py-24">
-			<div class="text-6xl mb-4">{{ activeList === "short" ? "🎯" : "🌟" }}</div>
-			<p class="text-xl font-semibold text-gray-700">No {{ activeList === "short" ? "short term" : "long term" }} wishes yet!</p>
-			<p class="text-gray-400 mt-1">Check back soon.</p>
-		</div>
-
-		<template v-if="currentGotten.length > 0">
-			<div class="mt-16 pt-10 border-t border-gray-100">
-				<h2 class="text-lg font-semibold text-gray-400 mb-5 flex items-center gap-2">
-					<span>✓</span>
-					Already on the way
-				</h2>
-				<div :class="compact ? 'flex flex-col gap-1.5' : 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3'">
-					<WishlistItem v-for="item in currentGotten" :key="item.id" :item="item" :priority="99" :compact="compact" />
-				</div>
-			</div>
-		</template>
-	</div>
+    <!-- Feature cards -->
+    <div class="grid grid-cols-3 gap-3">
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm text-center">
+        <div class="text-3xl mb-2">🎯</div>
+        <p class="font-semibold text-gray-800 text-sm">Prioritize</p>
+        <p class="text-xs text-gray-400 mt-0.5">Rank what matters most</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm text-center">
+        <div class="text-3xl mb-2">🌟</div>
+        <p class="font-semibold text-gray-800 text-sm">Plan ahead</p>
+        <p class="text-xs text-gray-400 mt-0.5">Short &amp; long term</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm text-center">
+        <div class="text-3xl mb-2">✓</div>
+        <p class="font-semibold text-gray-800 text-sm">Track gifts</p>
+        <p class="text-xs text-gray-400 mt-0.5">Mark what's been gotten</p>
+      </div>
+    </div>
+  </div>
 </template>

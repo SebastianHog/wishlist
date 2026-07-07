@@ -5,6 +5,7 @@ const props = defineProps<{
   item?: WishlistItem | null
   defaultPriority?: number
   defaultList?: WishlistList
+  defaultProfile?: string
 }>()
 
 const emit = defineEmits<{
@@ -22,6 +23,7 @@ const form = reactive({
   image: '',
   priority: 1,
   list: 'short' as WishlistList,
+  profile: '',
 })
 
 const saving = ref(false)
@@ -39,6 +41,7 @@ watch(() => props.item, (item) => {
     form.image = item.image ?? ''
     form.priority = item.priority
     form.list = item.list ?? 'short'
+    form.profile = item.profile ?? props.defaultProfile ?? ''
   } else {
     form.name = ''
     form.description = ''
@@ -47,6 +50,7 @@ watch(() => props.item, (item) => {
     form.image = ''
     form.priority = props.defaultPriority ?? getNextPriority()
     form.list = props.defaultList ?? 'short'
+    form.profile = props.defaultProfile ?? ''
   }
 }, { immediate: true })
 
@@ -73,6 +77,7 @@ async function save() {
       image: form.image.trim() || undefined,
       priority: Number(form.priority) || 1,
       list: form.list,
+      profile: form.profile,
     }
 
     if (isEditing.value && props.item) {
@@ -115,7 +120,6 @@ function onOverlayClick(e: MouseEvent) {
         </div>
 
         <form class="px-6 py-5 space-y-4" @submit.prevent="save">
-          <!-- List picker -->
           <div class="flex rounded-xl overflow-hidden border border-gray-200 text-sm font-semibold">
             <button
               type="button"
@@ -180,9 +184,7 @@ function onOverlayClick(e: MouseEvent) {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
-                Priority
-              </label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
               <input
                 v-model.number="form.priority"
                 type="number"

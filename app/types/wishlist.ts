@@ -1,5 +1,12 @@
 export type WishlistList = 'short' | 'long'
 
+export interface Profile {
+  id: string
+  name: string
+  slug: string
+  createdAt: string
+}
+
 export interface WishlistItem {
   id: string
   name: string
@@ -10,6 +17,7 @@ export interface WishlistItem {
   priority: number
   gotten: boolean
   list: WishlistList
+  profile: string
   createdAt: string
   updatedAt: string
 }
